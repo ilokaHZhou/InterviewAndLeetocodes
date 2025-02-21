@@ -15,5 +15,5 @@ class Solution:
             else:
                 stack.pop()
 
-        # 第一种情况：此时我们已经遍历完了字符串，但是栈不为空，说明有相应的左括号没有右括号来匹配，所以return false，否则就return true (左括号有多余)
+        # 第一种情况：此时我们已经遍历完了字符串，但是栈不为空，说明有相应的左括号没有右括号来匹配(左括号有多余)，所以return false，否则就return true 
         return True if not stack else False
