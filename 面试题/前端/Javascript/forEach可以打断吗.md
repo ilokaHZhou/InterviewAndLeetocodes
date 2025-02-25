@@ -1,0 +1,1 @@
+`forEach` 本身不能用 `break` 或 `continue` 打断，但可通过抛出异常模拟中断，不过更推荐用支持 `break` 和 `continue` 的 `for...of` 或 `for` 循环替代以实现中断。 
