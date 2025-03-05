@@ -15,17 +15,16 @@ class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
         # 初始化哈希表，记录前缀和出现的次数
         prefix_count = defaultdict(int)
-        prefix_count[0] = 1  # 前缀和为0的情况出现一次, 针对特殊情况子串从数组
+        prefix_count[0] = 1 # 前缀和为0的情况出现一次, 针对特殊情况子串从数组开头开始且和正好等于k
+        prefix_sum = 0
+        count  = 0
 
-        prefix_sum = 0  # 当前前缀和
-        count = 0  # 符合条件的子数组个数
-
-        for num in nums:
-            prefix_sum += num  # 更新前缀和
+        for item in nums:
+            prefix_sum += item
+            prefix_sum_before = prefix_sum - k
             # 如果 prefix_sum - k 在哈希表中，说明存在子数组和为 k
-            if prefix_sum - k in prefix_count:
-                count += prefix_count[prefix_sum - k]
+            if prefix_sum_before in prefix_count:
+                count += prefix_count[prefix_sum_before]
             # 更新当前前缀和的出现次数
             prefix_count[prefix_sum] += 1
-
         return count
