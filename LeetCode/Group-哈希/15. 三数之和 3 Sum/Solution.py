@@ -64,7 +64,8 @@ class Solution:
                         right -= 1
                     while right > left and nums[left] == nums[left + 1]:
                         left += 1
-                        
+
+                    # 找到和为0的元组后左右边界都更新到下一位    
                     right -= 1
                     left += 1
                     
