@@ -2,10 +2,26 @@ import random
 
 """
 快速排序的平均时间复杂度（O(n*log2(n)))和空间复杂度（O(log2(n)))
-最坏情况下的时间复杂度（O(n^2)）和空间复杂度（O(n)）
+最坏情况下（完全逆序排序，选的基准在序列另一头）的时间复杂度（O(n^2)）和空间复杂度（O(n)）
+
+最坏情况发生在每次划分都极度不平衡时，例如每次选择的基准元素都是当前序列的最大或最小值。这种情况下，递归树的深度为n，每层仍需O(n)的时间，总复杂度为O(n²)。
+
+    逆序和顺序的情况
+    逆序序列：如果序列已经是逆序的，且每次选择第一个元素作为基准，那么每次划分都会将序列分成一个空子序列和一个包含剩余元素的子序列，导致复杂度退化为O(n²)。
+
+    顺序序列：如果序列已经是顺序的，且每次选择最后一个元素作为基准，同样会导致每次划分极度不平衡，复杂度退化为O(n²)。
+
+
+如何避免最坏情况？
+    1. 随机选择基准：通过随机选择基准元素，可以减少最坏情况发生的概率。
+
+    2. 三数取中法：选择序列的头、尾、中三个元素的中位数作为基准，也能有效避免最坏情况。 
+
+专门用于处理包含大量重复元素的序列？
+    三路排序法，只需要一次遍历，时间复杂度为 O(n)。
 """
 
-# 递归解法 （空间复杂度高，需要大量额外空间储存left mid和right数组）
+# 递归解法1 （空间复杂度高，需要大量额外空间储存left mid和right数组）
 def quicksort_recursive(arr):
     if len(arr) <= 1:
         return arr
@@ -19,7 +35,39 @@ def quicksort_recursive(arr):
 
 # -----------------------
 
-# 递归解法2（不需要额外空间，数组本身元素交换）
+# 递归解法2 （不需要额外空间，数组本身元素交换）
+
+def quicksort(arr, low, high):
+    if low >= high:
+        return
+
+    # 随机选择基准元素，并将其交换到末尾
+    pivot_index = random.randint(low, high)  # 随机选择一个索引
+    arr[pivot_index], arr[high] = arr[high], arr[pivot_index]  # 将基准元素放到最后
+
+    pivot_index = partition(arr, low, high)
+    quicksort(arr, low, pivot_index - 1)
+    quicksort(arr, pivot_index + 1, high)
+
+
+def partition(arr, low, high):
+    # 选择基准元素（此时基准元素已经在最后的位置）
+    pivot = arr[high]
+    i = low  # i 指向小于基准部分的末尾
+
+    # 遍历序列，将小于基准的元素放到左边
+    for j in range(low, high):
+        if arr[j] < pivot:
+            arr[i], arr[j] = arr[j], arr[i]  # 交换元素
+            i += 1
+
+    # 将基准元素放到正确的位置
+    arr[i], arr[high] = arr[high], arr[i]
+    return i
+
+# -----------------------
+
+# 递归解法3（不需要额外空间，数组本身元素交换, 三路排序处理有大量重复元素的序列）
 def quicksort_recursive2(nums, left, right):
     if left < right:
         # 选择随机数字作为比较轴进行排序，排完返回对应数字的index
@@ -53,7 +101,7 @@ def partition2(arr, left, right):
 
 # -----------------------
 
-# 循环解法
+# 循环解法（不需要额外空间，数组本身元素交换）
 def quicksort_iterative(arr):
     stack = [(0, len(arr) - 1)]
     
